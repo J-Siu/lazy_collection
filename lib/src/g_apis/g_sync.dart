@@ -57,8 +57,9 @@ class GSync {
   GSync({
     required this.lazyGDrive,
     required this.lazyGSignIn,
-    this.getLocalContent,
+    this.autoSyncIntervalMin = 10,
     this.getFilename,
+    this.getLocalContent,
     this.getLocalSaveTime,
     this.localSaveNotifier,
     this.setContent,
