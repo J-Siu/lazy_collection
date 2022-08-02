@@ -1,8 +1,8 @@
 name: lazy_collection
 description: Intended to save time, especially from things that are very repetitive across projects.
 
-version: 0.1.0
-homepage: https://github.com/j-siu/lazy
+version: 0.1.1
+homepage: https://github.com/j-siu/lazy_collection
 
 environment:
   sdk: '>=2.17.6 <3.0.0'
