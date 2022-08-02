@@ -40,7 +40,7 @@ flutter pub add lazy
 To prevent type collision, alway import with `as lazy` as follow:
 
 ```dart
-import 'package:lazy/lazy.dart' as lazy;
+import 'package:lazy_collection/lazy_collection.dart' as lazy;
 ```
 
 ## Additional information
