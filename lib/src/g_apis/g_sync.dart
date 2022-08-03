@@ -72,7 +72,7 @@ class GSync {
   ///
   /// [getLocalSaveTime] must be set
   DateTime get localSaveTime {
-    assert(getLocalSaveTime != null);
+    assert(getLocalSaveTime != null, '[getLocalSaveTime] function not provided.');
     return getLocalSaveTime!();
   }
 
@@ -80,7 +80,7 @@ class GSync {
   ///
   /// [getFilename] must be set
   String get filename {
-    assert(getFilename != null);
+    assert(getFilename != null, '[getFilename] function not provided.');
     return getFilename!();
   }
 
@@ -88,7 +88,7 @@ class GSync {
   ///
   /// [getLocalContent] must be set
   String get content {
-    assert(getLocalContent != null);
+    assert(getLocalContent != null, '[getLocalContent] function not provided.');
     return getLocalContent!();
   }
 
@@ -105,7 +105,7 @@ class GSync {
   /// Will trigger [sync] one time when changing from `false` to `true`
   bool get enableSync => _enableSync;
   set enableSync(bool v) {
-    assert(localSaveNotifier != null);
+    assert(localSaveNotifier != null, '[localSaveNotifier] not provided.');
     if (_enableSync != v) {
       _enableSync = v;
       if (v) {
@@ -162,7 +162,7 @@ class GSync {
     bool forceUpload = false,
   }) async {
     String debugPrefix = '$runtimeType.sync()';
-    assert(forceDownload != true && forceUpload != true);
+    assert(forceDownload != true && forceUpload != true, '[forceDownload] and [forceUpload] cannot be `true` at the same time.');
     if (enableSync) {
       lazy.log(debugPrefix);
       syncing.value = true;
@@ -214,7 +214,7 @@ class GSync {
   ///
   /// Download also apply data to [sites]
   Future _download(gd.File gFile) async {
-    assert(setContent != null);
+    assert(setContent != null, '[setContent] function not provided.');
     String debugPrefix = '$runtimeType._download()';
     lazy.log(debugPrefix);
 
