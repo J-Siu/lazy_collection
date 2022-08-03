@@ -120,6 +120,43 @@ class GSync {
     }
   }
 
+  /// Return modify time of the last entry from [gFiles]
+  /// - If [gFiles] is empty, `DateTime(0)` is returned.
+  Future<DateTime> remoteLastSaveTime(List<gd.File> gFiles) async {
+    String debugPrefix = '$runtimeType.remoteLastSaveTime()';
+    try {
+      lazy.log('$debugPrefix:${gFiles.length}');
+      DateTime lastSaveTime = lazy.dayZero;
+      if (gFiles.isNotEmpty) {
+        lastSaveTime = gFiles.last.modifiedTime ?? lazy.dayZero;
+        lazy.log('$debugPrefix:gFiles.last:\n${lazy.jsonPretty(gFiles.last)}');
+        lazy.log('$debugPrefix:lastSaveTime:${gFiles.last.modifiedTime!.toUtc().toIso8601String()}');
+      }
+      return lastSaveTime;
+    } catch (e) {
+      throw ('$debugPrefix:catch:$e');
+    }
+  }
+
+  /// Return remote file list
+  Future<List<gd.File>> remoteFiles() async {
+    String debugPrefix = '$runtimeType.remoteFiles()';
+    try {
+      // Login + setup GDrive
+      lazyGDrive.account = await lazyGSignIn.signInHandler();
+      lazy.log('$debugPrefix:done sign-in');
+      // remote info
+      String q = "name: '$filename'";
+      var gFileList = await lazyGDrive.list(orderBy: defaultGDriveOrderByModifiedTime, q: q);
+      lazy.log('$debugPrefix:$gFileList');
+      List<gd.File> gFiles = gFileList.files ?? [];
+      lazy.log('$debugPrefix:${gFiles.length}');
+      return gFiles;
+    } catch (e) {
+      throw ('$debugPrefix:catch:$e');
+    }
+  }
+
   /// [enableAutoSync] control period sync with interval = [autoSyncIntervalMin]
   ///
   /// - If [enableSync] == false, it will have no actual effect, as [sync] does check enable
@@ -168,21 +205,25 @@ class GSync {
       syncing.value = true;
       _lastSync = DateTime.now();
       try {
-        // Login + setup GDrive
-        lazyGDrive.account = await lazyGSignIn.signInHandler();
-        lazy.log('$debugPrefix:done sign-in');
-        // remote info
-        String q = "name: '$filename'";
-        var gFileList = await lazyGDrive.list(orderBy: defaultGDriveOrderByModifiedTime, q: q);
-        lazy.log('$debugPrefix:$gFileList');
-        List<gd.File> gFiles = gFileList.files ?? [];
-        lazy.log('$debugPrefix:${gFiles.length}');
-        int lastSaveMillisecondsGDrive = lazy.dayZero.millisecondsSinceEpoch;
-        if (gFiles.isNotEmpty) {
-          lastSaveMillisecondsGDrive = (gFiles.last.modifiedTime ?? lazy.dayZero).millisecondsSinceEpoch;
-          lazy.log('$debugPrefix:gFiles.last:\n${lazy.jsonPretty(gFiles.last)}');
-          lazy.log('$debugPrefix:lastSaveTimeGDrive:${gFiles.last.modifiedTime!.toUtc().toIso8601String()}');
-        }
+        // Get remote file list
+        List<gd.File> gFiles = await remoteFiles();
+        int lastSaveMillisecondsGDrive = (await remoteLastSaveTime(gFiles)).millisecondsSinceEpoch;
+
+        // // Login + setup GDrive
+        // lazyGDrive.account = await lazyGSignIn.signInHandler();
+        // lazy.log('$debugPrefix:done sign-in');
+        // // remote info
+        // String q = "name: '$filename'";
+        // var gFileList = await lazyGDrive.list(orderBy: defaultGDriveOrderByModifiedTime, q: q);
+        // lazy.log('$debugPrefix:$gFileList');
+        // List<gd.File> gFiles = gFileList.files ?? [];
+        // lazy.log('$debugPrefix:${gFiles.length}');
+        // int lastSaveMillisecondsGDrive = lazy.dayZero.millisecondsSinceEpoch;
+        // if (gFiles.isNotEmpty) {
+        //   lastSaveMillisecondsGDrive = (gFiles.last.modifiedTime ?? lazy.dayZero).millisecondsSinceEpoch;
+        //   lazy.log('$debugPrefix:gFiles.last:\n${lazy.jsonPretty(gFiles.last)}');
+        //   lazy.log('$debugPrefix:lastSaveTimeGDrive:${gFiles.last.modifiedTime!.toUtc().toIso8601String()}');
+        // }
         // Local info
         int lastSaveMillisecondsLocal = localSaveTime.millisecondsSinceEpoch;
         lazy.log('$debugPrefix:lastSaveTimeLocal :${localSaveTime.toUtc().toIso8601String()}');
