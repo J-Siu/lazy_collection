@@ -209,7 +209,7 @@ class GSync {
         if (gFiles.isNotEmpty && (forceDownload || lastSaveMillisecondsGDrive > lastSaveMillisecondsLocal)) {
           // remote is newer -> download
           _download(gFiles.last);
-        } else if (gFiles.isEmpty || lastSaveMillisecondsGDrive < lastSaveMillisecondsLocal) {
+        } else if (gFiles.isEmpty || forceUpload || lastSaveMillisecondsGDrive < lastSaveMillisecondsLocal) {
           // no remote or local is newer -> upload
           _upload();
         } else {

@@ -18,3 +18,11 @@
 ## 0.1.4
 
 - [GSync] assertion correction
+
+## 0.1.5
+
+- [GSync] correct sync logic
+
+## 0.1.6
+
+- [GSync] Fix forceUpload
