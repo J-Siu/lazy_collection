@@ -11,6 +11,7 @@ enum SwitchType {
 
 class Switch {
   BuildContext context;
+  bool disabled = false;
   double borderRadius;
   double height;
   double margin;
@@ -22,6 +23,7 @@ class Switch {
   Switch(
     this.context, {
     this.borderRadius = 20,
+    this.disabled = false,
     this.durationMilliseconds = 50,
     this.height = 35,
     this.margin = lazy.defaultPadding,
@@ -40,6 +42,7 @@ class Switch {
     IconData? inactiveIcon,
     String? activeText,
     String? inactiveText,
+    bool disabled = false,
     bool showOnOff = false,
     required bool value,
     required void Function(bool) onToggle,
@@ -51,6 +54,7 @@ class Switch {
           activeIcon: _themedIcon(activeIcon),
           activeText: activeText,
           borderRadius: borderRadius,
+          disabled: disabled,
           duration: Duration(milliseconds: durationMilliseconds),
           height: height,
           inactiveColor: Theme.of(context).backgroundColor,
@@ -68,6 +72,7 @@ class Switch {
   Widget onOff({
     String activeText = 'On',
     String inactiveText = 'Off',
+    bool disabled = false,
     bool showOnOff = true,
     required bool value,
     required void Function(bool) onToggle,
@@ -78,6 +83,7 @@ class Switch {
           activeColor: Theme.of(context).backgroundColor,
           activeText: activeText,
           borderRadius: borderRadius,
+          disabled: disabled,
           duration: Duration(milliseconds: durationMilliseconds),
           height: height,
           inactiveColor: Theme.of(context).backgroundColor,
@@ -102,6 +108,7 @@ class LabeledSwitch {
   String? activeText;
   String? inactiveText;
   bool showOnOff;
+  bool disabled = false;
   bool value;
   void Function(bool) onToggle;
 
@@ -113,6 +120,7 @@ class LabeledSwitch {
     required this.value,
     this.activeIcon,
     this.activeText,
+    this.disabled = false,
     this.inactiveIcon,
     this.inactiveText,
     this.padding = lazy.defaultPadding,
@@ -128,6 +136,7 @@ class LabeledSwitch {
     switch (type) {
       case SwitchType.onOff:
         return lazySwitch.onOff(
+          disabled: disabled,
           onToggle: onToggle,
           showOnOff: showOnOff,
           value: value,
@@ -136,6 +145,7 @@ class LabeledSwitch {
         return lazySwitch.toggle(
           activeIcon: activeIcon,
           activeText: activeText,
+          disabled: disabled,
           inactiveIcon: inactiveIcon,
           inactiveText: inactiveText,
           onToggle: onToggle,
