@@ -50,9 +50,15 @@ class _SpinningWidget extends State<SpinningWidget> with TickerProviderStateMixi
 
   @override
   void dispose() {
+    String debugPrefix = '$runtimeType.dispose()';
     widget.spin?.removeListener(_spinHandler);
     // Controller must be disposed
-    _controller.dispose();
+    try {
+      _controller.dispose();
+    } catch (e) {
+      // Do nothing. _controller disposed already.
+      lazy.log('$debugPrefix:catch:$e -> Do nothing. _controller disposed.');
+    }
     super.dispose();
   }
 
@@ -68,7 +74,12 @@ class _SpinningWidget extends State<SpinningWidget> with TickerProviderStateMixi
     String debugPrefix = '$runtimeType.start()';
     lazy.log(debugPrefix);
     _spinStart = lazy.now;
-    _controller.repeat();
+    try {
+      _controller.repeat();
+    } catch (e) {
+      // Do nothing. _controller disposed already.
+      lazy.log('$debugPrefix:catch:$e -> Do nothing. _controller disposed.');
+    }
   }
 
   void _stop() async {
@@ -81,7 +92,13 @@ class _SpinningWidget extends State<SpinningWidget> with TickerProviderStateMixi
       lazy.log('$debugPrefix:spinning stop delay $delay seconds');
       await Future.delayed(Duration(seconds: delay));
     }
-    _controller.stop(canceled: false);
+    // If widget disposed before timer run out, _controller maybe gone already
+    try {
+      _controller.stop(canceled: false);
+    } catch (e) {
+      // Do nothing. _controller disposed already.
+      lazy.log('$debugPrefix:catch:$e -> Do nothing. _controller disposed.');
+    }
     lazy.log('$debugPrefix:spinning stopped');
   }
 
