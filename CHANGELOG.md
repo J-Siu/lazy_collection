@@ -14,3 +14,7 @@
 
 - [Switch] support [disabled]
 - [SpinningWidget] handle disposed controller
+
+## 0.1.4
+
+- [GSync] assertion correction

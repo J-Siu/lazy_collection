@@ -199,8 +199,8 @@ class GSync {
     bool forceUpload = false,
   }) async {
     String debugPrefix = '$runtimeType.sync()';
-    assert(forceDownload != true && forceUpload != true, '[forceDownload] and [forceUpload] cannot be `true` at the same time.');
-    if (enableSync) {
+    assert(!(forceDownload == true && forceUpload == true), '[forceDownload] and [forceUpload] cannot be `true` at the same time.');
+    if (enableSync && !syncing.value) {
       lazy.log(debugPrefix);
       syncing.value = true;
       _lastSync = DateTime.now();
@@ -208,22 +208,6 @@ class GSync {
         // Get remote file list
         List<gd.File> gFiles = await remoteFiles();
         int lastSaveMillisecondsGDrive = (await remoteLastSaveTime(gFiles)).millisecondsSinceEpoch;
-
-        // // Login + setup GDrive
-        // lazyGDrive.account = await lazyGSignIn.signInHandler();
-        // lazy.log('$debugPrefix:done sign-in');
-        // // remote info
-        // String q = "name: '$filename'";
-        // var gFileList = await lazyGDrive.list(orderBy: defaultGDriveOrderByModifiedTime, q: q);
-        // lazy.log('$debugPrefix:$gFileList');
-        // List<gd.File> gFiles = gFileList.files ?? [];
-        // lazy.log('$debugPrefix:${gFiles.length}');
-        // int lastSaveMillisecondsGDrive = lazy.dayZero.millisecondsSinceEpoch;
-        // if (gFiles.isNotEmpty) {
-        //   lastSaveMillisecondsGDrive = (gFiles.last.modifiedTime ?? lazy.dayZero).millisecondsSinceEpoch;
-        //   lazy.log('$debugPrefix:gFiles.last:\n${lazy.jsonPretty(gFiles.last)}');
-        //   lazy.log('$debugPrefix:lastSaveTimeGDrive:${gFiles.last.modifiedTime!.toUtc().toIso8601String()}');
-        // }
         // Local info
         int lastSaveMillisecondsLocal = localSaveTime.millisecondsSinceEpoch;
         lazy.log('$debugPrefix:lastSaveTimeLocal :${localSaveTime.toUtc().toIso8601String()}');
