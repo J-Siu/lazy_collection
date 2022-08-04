@@ -97,14 +97,11 @@ class GSync {
   /// Auto sync interval, time between [lastSync] till next sync
   int autoSyncIntervalMin = 10;
 
-  /// [enableSync] control listening to localSaveNotifier
-  ///
+  /// [enableLocalSaveNotifier] control listening to [localSaveNotifier]
   /// - Start listening if `true`
   /// - Stop listening if `false`
-  ///
-  /// Will trigger [sync] one time when changing from `false` to `true`
-  bool get enableSync => _enableSync;
-  set enableSync(bool v) {
+  bool get enableLocalSaveNotifier => _enableSync;
+  set enableLocalSaveNotifier(bool v) {
     assert(localSaveNotifier != null, '[localSaveNotifier] not provided.');
     if (_enableSync != v) {
       _enableSync = v;
@@ -112,7 +109,6 @@ class GSync {
         // Enable Sites preference saving to trigger sync()
         localSaveNotifier!.addListener(() => sync());
         // Sync once when enable
-        sync();
       } else {
         // Disable Sites preference saving to trigger sync()
         localSaveNotifier!.removeListener(() => sync());
@@ -158,8 +154,6 @@ class GSync {
   }
 
   /// [enableAutoSync] control period sync with interval = [autoSyncIntervalMin]
-  ///
-  /// - If [enableSync] == false, it will have no actual effect, as [sync] does check enable
   /// - interval always count from [lastSync].
   bool get enableAutoSync => _enableAutoSync;
   set enableAutoSync(bool v) {
@@ -185,7 +179,7 @@ class GSync {
   /// - Trigger sign-in if necessary. Handle by [GSignIn]
   /// - Initiate download from remote if [getLocalSaveTime] < google drive save time
   /// - Initiate upload to remote if [getLocalSaveTime] > google drive save time
-  /// - Auto skip(no error) if [enableSync] is `false`, except when [forceDownload] or [forceUpload] is `true`
+  /// - Auto skip(no error) if [enableLocalSaveNotifier] is `false`, except when [forceDownload] or [forceUpload] is `true`
   ///
   /// - [syncing] : will be set to `true` at beginning and to `false` when done.
   /// - [syncError] : will be set to `true` on error. Reset(to `false`) on successful sync.
@@ -200,7 +194,7 @@ class GSync {
   }) async {
     String debugPrefix = '$runtimeType.sync()';
     assert(!(forceDownload == true && forceUpload == true), '[forceDownload] and [forceUpload] cannot be `true` at the same time.');
-    if (enableSync && !syncing.value) {
+    if (!syncing.value) {
       lazy.log(debugPrefix);
       syncing.value = true;
       _lastSync = DateTime.now();
@@ -231,7 +225,7 @@ class GSync {
         lazy.log('$debugPrefix:catch:$e');
       }
     } else {
-      lazy.log('$debugPrefix:called while disabled');
+      lazy.log('$debugPrefix:syncing in progress');
     }
   }
 
