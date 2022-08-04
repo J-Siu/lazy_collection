@@ -9,3 +9,8 @@
 ## 0.1.2
 
 - [g_sync] add remoteLastSaveTime(), remoteFiles()
+
+## 0.1.3
+
+- [Switch] support [disabled]
+- [SpinningWidget] handle disposed controller
