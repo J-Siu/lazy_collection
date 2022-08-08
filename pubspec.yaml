@@ -1,7 +1,7 @@
 name: lazy_collection
 description: Intended to save time, especially from things that are very repetitive across projects.
 
-version: 0.2.0
+version: 0.3.0
 homepage: https://github.com/j-siu/lazy_collection
 
 environment:
@@ -11,11 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_switch: ^0.3.2
-  google_sign_in: ^5.4.0
-  googleapis: ^9.1.0
   http: ^0.13.5
   intl: ^0.17.0
-  js: ^0.6.4
   theme_provider: ^0.5.0
   universal_html: ^2.0.8
   url_launcher: ^6.1.5

@@ -1,5 +1,3 @@
-import 'package:googleapis/drive/v3.dart' as gd;
-
 /// ### Lazy extension for [String]
 extension LazyExtString on String {
   /// Only capitalize first letter of this string
@@ -15,7 +13,4 @@ extension LazyExtString on String {
 
   /// Create [ByteStream] from [this]
   Stream<List<int>> toByteStream() => Future.value(codeUnits).asStream().asBroadcastStream();
-
-  /// Create [Media] from [this]
-  gd.Media toMedia() => gd.Media(toByteStream(), length);
 }

@@ -1,3 +1,5 @@
+## 0.3.0
+- Remove [GDrive], [GSync], [GSignIn]
 ## 0.2.0
 - [GDrive], [GSync]
   - take [token] instead of [GoogleSignInAccount]
