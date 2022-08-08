@@ -10,6 +10,9 @@ extension LazyExtString on String {
   /// - Source: https://stackoverflow.com/a/29629114/1810391
   String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
 
+  /// Same as [codeUnits]
+  List<int> toBytes() => codeUnits;
+
   /// Create [ByteStream] from [this]
   Stream<List<int>> toByteStream() => Future.value(codeUnits).asStream().asBroadcastStream();
 
