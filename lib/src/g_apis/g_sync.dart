@@ -139,7 +139,8 @@ class GSync {
     String debugPrefix = '$runtimeType.remoteFiles()';
     try {
       // Login + setup GDrive
-      lazyGDrive.account = await lazyGSignIn.signInHandler();
+      lazyGDrive.token = await lazyGSignIn.signInHandler();
+
       lazy.log('$debugPrefix:done sign-in');
       // remote info
       String q = "name: '$filename'";
@@ -239,7 +240,7 @@ class GSync {
 
     try {
       String content = '';
-      lazyGDrive.account = await lazyGSignIn.signInHandler();
+      lazyGDrive.token = await lazyGSignIn.signInHandler();
       var media = await lazyGDrive.get(gFile.id!, downloadOptions: gd.DownloadOptions.fullMedia);
       if (media is gd.Media) {
         content = await lazy.mediaStreamToString(media.stream);
@@ -260,7 +261,7 @@ class GSync {
 
     try {
       // Login + setup GDrive
-      lazyGDrive.account = await lazyGSignIn.signInHandler();
+      lazyGDrive.token = await lazyGSignIn.signInHandler();
       // File meta + content
       var file = gDriveFileMeta(name: filename, modifiedTime: localSaveTime);
       var media = content.toMedia();

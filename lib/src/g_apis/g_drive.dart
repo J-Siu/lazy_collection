@@ -11,7 +11,7 @@ const String errorNotSignIn = "'account' cannot be null(Not sign-in).";
 /// - [account] is null during instantiate. However it must be set before calling any calling any method [create], [get], [list], [searchLatest].
 class GDrive {
   // --- internal
-  GoogleSignInAccount? _account;
+  String _token = '';
   final HttpClient _httpClient = HttpClient();
   gd.DriveApi? _driveApi;
 
@@ -19,24 +19,27 @@ class GDrive {
   bool debugLogList = true;
 
   // --- Getter/Setter
-  bool get isSignedIn => _account != null;
-  bool get notSignedIn => _account == null;
+  bool get isSignedIn => _token.isNotEmpty;
+  bool get notSignedIn => !isSignedIn;
 
   /// Hold [GoogleSignInAccount]. Will throw if `null`.
-  GoogleSignInAccount get account {
-    if (notSignedIn) throw ('$runtimeType:$errorNotSignIn');
-    return _account!;
+  String get token {
+    if (_token.isEmpty) throw ('$runtimeType:$errorNotSignIn');
+    return _token;
   }
 
-  set account(GoogleSignInAccount? currentUser) {
-    if (currentUser == null) throw ('$runtimeType:$errorNotSignIn');
-    if (_account != currentUser) _account = currentUser;
-    // Setup
-    _httpClient.headers = headers;
-    _driveApi = gd.DriveApi(_httpClient);
+  set token(String v) {
+    if (v.isEmpty) throw ('$runtimeType:$errorNotSignIn');
+    if (_token != v) {
+      _httpClient.headers = headers;
+      _driveApi = gd.DriveApi(_httpClient);
+    }
   }
 
-  Future<Map<String, String>> get headers => account.authHeaders;
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer $token',
+        'X-Goog-AuthUser': '0',
+      };
 
   HttpClient get lazyGHttpClient {
     if (notSignedIn) throw ('$runtimeType:$errorNotSignIn');
