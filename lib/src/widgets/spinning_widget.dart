@@ -42,6 +42,7 @@ class _SpinningWidget extends State<SpinningWidget> with TickerProviderStateMixi
   void initState() {
     super.initState();
     widget.spin?.addListener(_spinHandler);
+    _stop();
     // Check spin value, may started already
     if (widget.spin?.value == true) {
       _start();
