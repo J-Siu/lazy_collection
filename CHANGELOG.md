@@ -1,3 +1,6 @@
+## 0.3.1
+- [SpinningWidget]
+  - make sure controller stop at the beginning
 ## 0.3.0
 - Remove [GDrive], [GSync], [GSignIn]
 ## 0.2.0
